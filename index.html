@@ -13,15 +13,22 @@
         .progress-bar { transition: width 0.8s ease-out; }
         .modal-overlay { background: rgba(185, 28, 28, 0.4); backdrop-filter: blur(4px); }
         
-        /* Memastikan elemen navigasi sentiasa boleh diklik dalam iframe Google Sites */
         header { pointer-events: auto !important; position: sticky; top: 0; z-index: 9999; }
         nav button { cursor: pointer !important; touch-action: manipulation; position: relative; z-index: 10000; }
     </style>
     
     <script>
-        // Logik Navigasi Utama (Diletakkan di luar modul untuk kepantasan akses)
+        // Data sasaran diletakkan secara global supaya boleh diakses oleh fungsi penjanaan borang
+        const sasaranDataGlobal = {
+            "R10 PRODIGY": 25, "1 DINAMIK": 35, "1 INOVATIF": 33, "1 KREATIF": 32, "1 PROAKTIF": 33, "1 SINERGI": 35,
+            "2 DINAMIK": 46, "2 INOVATIF": 47, "2 KREATIF": 41, "2 SINERGI": 45,
+            "3 DINAMIK": 37, "3 INOVATIF": 36, "3 KREATIF": 31, "3 PROAKTIF": 34, "3 SINERGI": 36,
+            "4 DINAMIK": 40, "4 INOVATIF": 39, "4 KREATIF": 40, "4 PROAKTIF": 39, "4 SINERGI": 40,
+            "5 DINAMIK": 35, "5 INOVATIF": 37, "5 KREATIF": 39, "5 PROAKTIF": 40, "5 SINERGI": 39,
+            "6 DINAMIK": 30, "6 INOVATIF": 38, "6 KREATIF": 39, "6 PROAKTIF": 39, "6 SINERGI": 40
+        };
+
         function forceSwitchTab(tab) {
-            console.log("Menukar ke tab:", tab);
             const sections = ['section-form', 'section-dashboard', 'section-list'];
             const tabs = ['tab-form', 'tab-dashboard', 'tab-list'];
             
@@ -47,7 +54,32 @@
             });
         }
 
-        // Ekspos fungsi ke window secara global
+        // Fungsi penjanaan borang anak (Mesti global untuk oninput)
+        window.generateAnakFields = function(val) {
+            const container = document.getElementById('dynamicAnakContainer');
+            if (!container) return;
+            container.innerHTML = "";
+            const count = parseInt(val);
+            if (!count || count < 1) return;
+            
+            // Hadkan maksimum 10 untuk keselamatan layout
+            const safeCount = Math.min(count, 10);
+            
+            for (let i = 1; i <= safeCount; i++) {
+                container.innerHTML += `
+                <div class="p-6 bg-slate-50 rounded-2xl border-2 border-slate-100 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <p class="text-[10px] font-black text-red-700 uppercase">MAKLUMAT ANAK #${i}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="namaAnak_${i}" placeholder="NAMA PENUH ANAK" required class="px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-700 outline-none uppercase font-bold text-sm bg-white">
+                        <select id="kelasAnak_${i}" required class="px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-red-700 outline-none font-bold text-sm uppercase bg-white">
+                            <option value="">-- PILIH KELAS --</option>
+                            ${Object.keys(sasaranDataGlobal).map(k => `<option value="${k}">${k}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>`;
+            }
+        };
+
         window.switchTab = forceSwitchTab;
         window.checkAccessForList = function() {
             if (window.isAdminAuthenticated) {
@@ -75,7 +107,6 @@
 </head>
 <body class="bg-slate-50 min-h-screen">
 
-    <!-- Pengepala (Header) -->
     <header class="bg-white/95 backdrop-blur-md shadow-sm border-b border-red-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
@@ -94,7 +125,6 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-10">
-        <!-- SEKSYEN: BORANG -->
         <section id="section-form" class="max-w-3xl mx-auto space-y-8">
             <div class="text-center mb-10 space-y-2">
                 <h2 class="text-2xl md:text-3xl font-black text-red-800 uppercase tracking-tighter">SK WANGSA MAJU ZON R10</h2>
@@ -131,7 +161,6 @@
             </div>
         </section>
 
-        <!-- SEKSYEN: DASHBOARD -->
         <section id="section-dashboard" class="hidden space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-red-50">
@@ -154,7 +183,6 @@
             <div id="kpiGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- SEKSYEN: SENARAI RESPONDEN -->
         <section id="section-list" class="hidden space-y-8">
             <div class="flex flex-col lg:flex-row justify-between items-center bg-red-900 p-8 rounded-3xl text-white gap-6 shadow-xl relative overflow-hidden">
                 <div class="text-center md:text-left relative z-10">
@@ -177,7 +205,6 @@
         </section>
     </main>
 
-    <!-- Modal Auth -->
     <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
         <div class="modal-overlay absolute inset-0" onclick="window.closeAuthModal()"></div>
         <div class="bg-white rounded-3xl shadow-2xl z-10 w-11/12 max-w-md p-8 text-center space-y-4">
@@ -187,13 +214,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Firebase Configuration
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -213,7 +238,6 @@
         };
         const totalSasaran = Object.values(sasaranData).reduce((a, b) => a + b, 0);
 
-        // AUTH INITIALIZATION
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -236,28 +260,6 @@
                 }, (error) => console.error("Firestore Error:", error));
             }
         });
-
-        // Dynamic Fields Generation
-        window.generateAnakFields = (val) => {
-            const container = document.getElementById('dynamicAnakContainer');
-            if (!container) return;
-            container.innerHTML = "";
-            const count = parseInt(val);
-            if (!count) return;
-            for (let i = 1; i <= count; i++) {
-                container.innerHTML += `
-                <div class="p-6 bg-slate-50 rounded-2xl border-2 border-slate-100 space-y-4">
-                    <p class="text-[10px] font-black text-red-700 uppercase">MAKLUMAT ANAK #${i}</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="namaAnak_${i}" placeholder="NAMA PENUH ANAK" required class="px-4 py-3 rounded-xl border-2 focus:border-red-700 outline-none uppercase font-bold text-sm">
-                        <select id="kelasAnak_${i}" required class="px-4 py-3 rounded-xl border-2 focus:border-red-700 outline-none font-bold text-sm uppercase">
-                            <option value="">-- PILIH KELAS --</option>
-                            ${Object.keys(sasaranData).map(k => `<option value="${k}">${k}</option>`).join('')}
-                        </select>
-                    </div>
-                </div>`;
-            }
-        };
 
         window.renderRespondentList = () => {
             const container = document.getElementById('respondentContainer');
@@ -333,7 +335,6 @@
             }
         }
 
-        // Form Submission
         document.getElementById('surveyForm').onsubmit = async function(e) {
             e.preventDefault();
             if (!user) { alert("Sistem sedang bersambung ke Cloud. Sila cuba lagi sebentar."); return; }
@@ -387,7 +388,6 @@
             setTimeout(() => m.classList.add('hidden'), 5000);
         }
 
-        // Initialize Filter Kelas
         const fKelas = document.getElementById('filterKelas');
         if (fKelas) {
             Object.keys(sasaranData).forEach(k => {
