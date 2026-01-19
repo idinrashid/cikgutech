@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinjauan Keluarga SKWMZR10 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .tab-active { border-bottom: 3px solid #b91c1c; color: #b91c1c; background: white; }
+        .hidden { display: none !important; }
+        .progress-bar { transition: width 0.8s ease-out; }
+        .modal-overlay { background: rgba(185, 28, 28, 0.4); backdrop-filter: blur(4px); }
+        
+        /* Memastikan elemen navigasi sentiasa boleh diklik dalam iframe Google Sites */
+        header { pointer-events: auto !important; position: sticky; top: 0; z-index: 9999; }
+        nav button { cursor: pointer !important; touch-action: manipulation; position: relative; z-index: 10000; }
+    </style>
+    
+    <script>
+        // Logik Navigasi Utama (Diletakkan di luar modul untuk kepantasan akses)
+        function forceSwitchTab(tab) {
+            console.log("Menukar ke tab:", tab);
+            const sections = ['section-form', 'section-dashboard', 'section-list'];
+            const tabs = ['tab-form', 'tab-dashboard', 'tab-list'];
+            
+            sections.forEach(s => {
+                const el = document.getElementById(s);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const activeSection = document.getElementById('section-' + tab);
+            if (activeSection) activeSection.classList.remove('hidden');
+            
+            tabs.forEach(t => {
+                const btn = document.getElementById(t);
+                if (btn) {
+                    if (t === 'tab-' + tab) {
+                        btn.classList.add('tab-active');
+                        btn.classList.remove('text-red-800/60');
+                    } else {
+                        btn.classList.remove('tab-active');
+                        btn.classList.add('text-red-800/60');
+                    }
+                }
+            });
+        }
+
+        // Ekspos fungsi ke window secara global
+        window.switchTab = forceSwitchTab;
+        window.checkAccessForList = function() {
+            if (window.isAdminAuthenticated) {
+                forceSwitchTab('list');
+            } else {
+                const modal = document.getElementById('authModal');
+                if (modal) modal.classList.remove('hidden');
+            }
+        };
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('authModal');
+            if (modal) modal.classList.add('hidden');
+        };
+        window.verifyAndProceed = function() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === "jangantanya") {
+                window.isAdminAuthenticated = true;
+                window.closeAuthModal();
+                forceSwitchTab('list');
+            } else {
+                alert("KATA LALUAN SALAH");
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- Pengepala (Header) -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm border-b border-red-100">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-2 h-10 bg-red-700 rounded-full shadow-[0_0_10px_rgba(185,28,28,0.3)]"></div>
+                <div>
+                    <h1 class="text-sm md:text-xl font-extrabold text-red-800 leading-none tracking-tight uppercase">SKWMZR10 ANALYTICS</h1>
+                    <p class="text-[9px] font-bold text-amber-600 uppercase tracking-widest mt-1">Sistem Guru Data • Cloud Sync Active</p>
+                </div>
+            </div>
+            <nav class="flex bg-red-50 p-1 rounded-xl w-full md:w-auto overflow-x-auto border border-red-100">
+                <button type="button" onclick="window.switchTab('form')" id="tab-form" class="flex-1 md:flex-none px-5 py-2 text-[10px] font-black rounded-lg transition-all tab-active shadow-sm whitespace-nowrap uppercase">BORANG</button>
+                <button type="button" onclick="window.switchTab('dashboard')" id="tab-dashboard" class="flex-1 md:flex-none px-5 py-2 text-[10px] font-black text-red-800/60 hover:text-red-900 rounded-lg transition-all whitespace-nowrap uppercase">DASHBOARD KPI</button>
+                <button type="button" onclick="window.checkAccessForList()" id="tab-list" class="flex-1 md:flex-none px-5 py-2 text-[10px] font-black text-red-800/60 hover:text-red-900 rounded-lg transition-all whitespace-nowrap uppercase">SENARAI RESPONDEN</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-10">
+        <!-- SEKSYEN: BORANG -->
+        <section id="section-form" class="max-w-3xl mx-auto space-y-8">
+            <div class="text-center mb-10 space-y-2">
+                <h2 class="text-2xl md:text-3xl font-black text-red-800 uppercase tracking-tighter">SK WANGSA MAJU ZON R10</h2>
+                <div class="h-1.5 w-24 bg-amber-400 mx-auto rounded-full shadow-sm"></div>
+                <p class="text-[11px] font-bold text-red-600 tracking-[0.3em] uppercase">SISTEM PENYIMPANAN AWAN</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl shadow-red-900/5 overflow-hidden border border-red-50">
+                <div class="bg-gradient-to-br from-red-800 via-red-700 to-amber-600 px-8 py-14 text-white text-center">
+                    <h2 class="text-2xl md:text-3xl font-black tracking-tight leading-tight uppercase italic">TINJAUAN BILANGAN KELUARGA <br>TAHUN 2026</h2>
+                </div>
+                <form id="surveyForm" class="p-8 md:p-12 space-y-10">
+                    <div class="space-y-6">
+                        <h3 class="font-extrabold text-xl text-red-800 border-l-4 border-amber-400 pl-4 uppercase tracking-tight">PROFIL PENJAGA</h3>
+                        <div class="grid grid-cols-1 gap-6">
+                            <input type="text" id="namaKetua" placeholder="NAMA PENUH (HURUF BESAR) *" required class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-red-700 focus:bg-white outline-none transition-all uppercase font-semibold">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <input type="text" id="icKetua" required pattern="[0-9]{12}" maxlength="12" placeholder="NO. IC (12 DIGIT) *" class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-red-700 focus:bg-white outline-none font-semibold tracking-wider">
+                                <input type="tel" id="telKetua" required placeholder="NO. TELEFON *" class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-red-700 focus:bg-white outline-none font-semibold">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6 pt-6 border-t border-slate-100">
+                        <h3 class="font-extrabold text-xl text-red-800 border-l-4 border-red-700 pl-4 uppercase tracking-tight">MAKLUMAT MURID</h3>
+                        <div class="bg-amber-50 p-6 rounded-3xl text-center border border-amber-100 shadow-inner">
+                            <label class="block text-sm font-black text-red-900 mb-3 uppercase tracking-tighter">BILANGAN ANAK DI SKWMZR10?</label>
+                            <input type="number" id="bilAnak" min="1" max="10" required oninput="window.generateAnakFields(this.value)" class="w-24 px-4 py-4 text-center text-2xl font-black bg-white border-2 border-amber-200 rounded-2xl focus:border-red-700 outline-none shadow-sm text-red-800">
+                        </div>
+                        <div id="dynamicAnakContainer" class="space-y-4"></div>
+                    </div>
+                    <div id="formMessage" class="hidden p-5 rounded-2xl text-center font-bold"></div>
+                    <button type="submit" id="submitBtn" class="w-full bg-red-700 hover:bg-red-800 text-white font-black py-5 px-8 rounded-2xl transition-all shadow-xl shadow-red-900/20 active:scale-95 uppercase tracking-wider border-b-4 border-red-900">HANTAR MAKLUMAT</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SEKSYEN: DASHBOARD -->
+        <section id="section-dashboard" class="hidden space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-red-50">
+                    <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">SASARAN MURID</p>
+                    <p class="text-3xl font-black text-red-800 mt-1">1,120</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-red-50">
+                    <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">DIREKOD (CLOUD)</p>
+                    <p id="stat-anak" class="text-3xl font-black text-red-600 mt-1">0</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-red-50">
+                    <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">KELUARGA</p>
+                    <p id="stat-keluarga" class="text-3xl font-black text-red-800 mt-1">0</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-red-50">
+                    <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest">KPI</p>
+                    <p id="stat-kpi" class="text-3xl font-black text-emerald-600 mt-1">0%</p>
+                </div>
+            </div>
+            <div id="kpiGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SEKSYEN: SENARAI RESPONDEN -->
+        <section id="section-list" class="hidden space-y-8">
+            <div class="flex flex-col lg:flex-row justify-between items-center bg-red-900 p-8 rounded-3xl text-white gap-6 shadow-xl relative overflow-hidden">
+                <div class="text-center md:text-left relative z-10">
+                    <h2 class="text-2xl font-black uppercase tracking-tight italic">DATABASE CLOUD RESPONDEN</h2>
+                </div>
+                <div class="flex gap-4 items-center">
+                    <div class="bg-red-800 px-4 py-2 rounded-xl border border-red-700 text-white font-black">
+                        JUMLAH: <span id="list-count">0</span>
+                    </div>
+                    <button type="button" onclick="window.executeExport()" class="bg-amber-400 text-red-900 px-6 py-3 rounded-xl font-black text-xs uppercase shadow-lg hover:bg-amber-300">SALIN DATA</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="searchInput" oninput="window.renderRespondentList()" placeholder="CARI NAMA / IC..." class="w-full px-4 py-3 bg-white border border-red-100 rounded-xl outline-none text-sm font-semibold uppercase shadow-sm">
+                <select id="filterKelas" onchange="window.renderRespondentList()" class="w-full px-4 py-3 bg-white border border-red-100 rounded-xl outline-none text-sm font-bold uppercase shadow-sm">
+                    <option value="">SEMUA KELAS</option>
+                </select>
+            </div>
+            <div id="respondentContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </section>
+    </main>
+
+    <!-- Modal Auth -->
+    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="modal-overlay absolute inset-0" onclick="window.closeAuthModal()"></div>
+        <div class="bg-white rounded-3xl shadow-2xl z-10 w-11/12 max-w-md p-8 text-center space-y-4">
+            <h4 class="font-black uppercase tracking-widest text-lg text-red-900">AKSES GURU DATA</h4>
+            <input type="password" id="adminPass" placeholder="KATA LALUAN" class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-center font-bold tracking-widest outline-none focus:border-red-700">
+            <button type="button" onclick="window.verifyAndProceed()" class="w-full bg-red-700 text-white py-4 rounded-xl font-black uppercase shadow-lg">SAHKAN</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Firebase Configuration
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'skwm-2026';
+
+        let submissions = [];
+        let user = null;
+
+        const sasaranData = {
+            "R10 PRODIGY": 25, "1 DINAMIK": 35, "1 INOVATIF": 33, "1 KREATIF": 32, "1 PROAKTIF": 33, "1 SINERGI": 35,
+            "2 DINAMIK": 46, "2 INOVATIF": 47, "2 KREATIF": 41, "2 SINERGI": 45,
+            "3 DINAMIK": 37, "3 INOVATIF": 36, "3 KREATIF": 31, "3 PROAKTIF": 34, "3 SINERGI": 36,
+            "4 DINAMIK": 40, "4 INOVATIF": 39, "4 KREATIF": 40, "4 PROAKTIF": 39, "4 SINERGI": 40,
+            "5 DINAMIK": 35, "5 INOVATIF": 37, "5 KREATIF": 39, "5 PROAKTIF": 40, "5 SINERGI": 39,
+            "6 DINAMIK": 30, "6 INOVATIF": 38, "6 KREATIF": 39, "6 PROAKTIF": 39, "6 SINERGI": 40
+        };
+        const totalSasaran = Object.values(sasaranData).reduce((a, b) => a + b, 0);
+
+        // AUTH INITIALIZATION
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) { console.error("Auth Error:", err); }
+        };
+        initAuth();
+
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            if (user) {
+                const q = collection(db, 'artifacts', appId, 'public', 'data', 'tinjauan_2026');
+                onSnapshot(q, (snapshot) => {
+                    submissions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    updateDashboard();
+                    if (typeof window.renderRespondentList === 'function') window.renderRespondentList();
+                }, (error) => console.error("Firestore Error:", error));
+            }
+        });
+
+        // Dynamic Fields Generation
+        window.generateAnakFields = (val) => {
+            const container = document.getElementById('dynamicAnakContainer');
+            if (!container) return;
+            container.innerHTML = "";
+            const count = parseInt(val);
+            if (!count) return;
+            for (let i = 1; i <= count; i++) {
+                container.innerHTML += `
+                <div class="p-6 bg-slate-50 rounded-2xl border-2 border-slate-100 space-y-4">
+                    <p class="text-[10px] font-black text-red-700 uppercase">MAKLUMAT ANAK #${i}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="namaAnak_${i}" placeholder="NAMA PENUH ANAK" required class="px-4 py-3 rounded-xl border-2 focus:border-red-700 outline-none uppercase font-bold text-sm">
+                        <select id="kelasAnak_${i}" required class="px-4 py-3 rounded-xl border-2 focus:border-red-700 outline-none font-bold text-sm uppercase">
+                            <option value="">-- PILIH KELAS --</option>
+                            ${Object.keys(sasaranData).map(k => `<option value="${k}">${k}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>`;
+            }
+        };
+
+        window.renderRespondentList = () => {
+            const container = document.getElementById('respondentContainer');
+            if (!container) return;
+            const search = document.getElementById('searchInput').value.toUpperCase();
+            const filterKelas = document.getElementById('filterKelas').value;
+
+            const filtered = submissions.filter(s => {
+                const mSearch = s.nama.includes(search) || s.ic.includes(search);
+                const mKelas = filterKelas === "" || s.anak.some(a => a.kelas === filterKelas);
+                return mSearch && mKelas;
+            });
+
+            const countEl = document.getElementById('list-count');
+            if (countEl) countEl.textContent = filtered.length;
+            
+            container.innerHTML = filtered.map(s => `
+                <div class="bg-white p-6 rounded-3xl border border-red-50 shadow-sm">
+                    <h4 class="font-black text-red-900 uppercase text-sm">${s.nama}</h4>
+                    <p class="text-[9px] text-amber-600 font-bold mb-3 italic">IC: ${s.ic} | TEL: ${s.tel}</p>
+                    <div class="space-y-1">
+                        ${s.anak.map(a => `
+                            <div class="bg-red-50 p-2 rounded-lg text-[10px] font-bold flex justify-between">
+                                <span>${a.nama}</span>
+                                <span class="text-red-700">${a.kelas}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.executeExport = () => {
+            let csv = "Nama Penjaga\tIC\tTelefon\tAnak\n";
+            submissions.forEach(s => {
+                const det = s.anak.map(a => `${a.nama} [${a.kelas}]`).join(" | ");
+                csv += `${s.nama}\t${s.ic}\t${s.tel}\t${det}\n`;
+            });
+            const ta = document.createElement('textarea'); ta.value = csv;
+            document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+            document.body.removeChild(ta); alert("DATA CLOUD TELAH DISALIN.");
+        };
+
+        function updateDashboard() {
+            const totalRec = submissions.reduce((a, b) => a + (parseInt(b.bil) || 0), 0);
+            const anakStat = document.getElementById('stat-anak');
+            const kelStat = document.getElementById('stat-keluarga');
+            const kpiStat = document.getElementById('stat-kpi');
+            
+            if(anakStat) anakStat.textContent = totalRec;
+            if(kelStat) kelStat.textContent = submissions.length;
+            if(kpiStat) kpiStat.textContent = ((totalRec / totalSasaran) * 100).toFixed(1) + "%";
+
+            const tally = {};
+            Object.keys(sasaranData).forEach(k => tally[k] = 0);
+            submissions.forEach(s => s.anak.forEach(a => { if(tally[a.kelas] !== undefined) tally[a.kelas]++; }));
+
+            const grid = document.getElementById('kpiGrid');
+            if (grid) {
+                grid.innerHTML = Object.keys(sasaranData).map(k => {
+                    const pct = ((tally[k] / sasaranData[k]) * 100).toFixed(0);
+                    return `
+                    <div class="p-5 bg-white rounded-2xl border border-red-50 shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="font-black text-red-900 text-[10px] uppercase">${k}</p>
+                            <p class="text-[10px] font-black text-amber-500">${tally[k]}/${sasaranData[k]}</p>
+                        </div>
+                        <div class="w-full bg-red-50 h-2 rounded-full overflow-hidden">
+                            <div class="progress-bar bg-red-700 h-full" style="width: ${Math.min(pct, 100)}%"></div>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        // Form Submission
+        document.getElementById('surveyForm').onsubmit = async function(e) {
+            e.preventDefault();
+            if (!user) { alert("Sistem sedang bersambung ke Cloud. Sila cuba lagi sebentar."); return; }
+
+            const ic = document.getElementById('icKetua').value;
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = "SEDANG MENGHANTAR...";
+
+            if (submissions.some(s => s.ic === ic)) {
+                showMsg("RALAT: NO. IC TELAH DIDAFTARKAN.", "bg-rose-50 text-rose-600");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "HANTAR MAKLUMAT";
+                return;
+            }
+
+            const bil = parseInt(document.getElementById('bilAnak').value);
+            const anak = [];
+            for(let i=1; i<=bil; i++) {
+                anak.push({ 
+                    nama: document.getElementById(`namaAnak_${i}`).value.toUpperCase(), 
+                    kelas: document.getElementById(`kelasAnak_${i}`).value 
+                });
+            }
+
+            const payload = {
+                timestamp: new Date().toISOString(),
+                nama: document.getElementById('namaKetua').value.toUpperCase(),
+                ic, tel: document.getElementById('telKetua').value, bil, anak
+            };
+
+            try {
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'tinjauan_2026');
+                await addDoc(colRef, payload);
+                showMsg("BERJAYA: DATA DISIMPAN KE CLOUD.", "bg-green-50 text-green-800");
+                this.reset();
+                document.getElementById('dynamicAnakContainer').innerHTML = "";
+            } catch (err) {
+                console.error(err);
+                showMsg("RALAT: GAGAL MENGHANTAR DATA.", "bg-rose-50 text-rose-600");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "HANTAR MAKLUMAT";
+            }
+        };
+
+        function showMsg(t, c) {
+            const m = document.getElementById('formMessage');
+            if (!m) return;
+            m.textContent = t; m.className = `p-5 rounded-2xl text-center font-bold block mb-6 ${c} uppercase text-xs`;
+            setTimeout(() => m.classList.add('hidden'), 5000);
+        }
+
+        // Initialize Filter Kelas
+        const fKelas = document.getElementById('filterKelas');
+        if (fKelas) {
+            Object.keys(sasaranData).forEach(k => {
+                const opt = document.createElement('option'); opt.value = k; opt.textContent = k;
+                fKelas.appendChild(opt);
+            });
+        }
+    </script>
+</body>
+</html>
